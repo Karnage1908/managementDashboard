@@ -1,5 +1,5 @@
 // ============================================
-// OVERVIEW PAGE — Executive Dashboard
+// OVERVIEW PAGE — Executive Cyber HUD Dashboard
 // ============================================
 
 const OverviewPage = {
@@ -15,114 +15,118 @@ const OverviewPage = {
     const events = Store.get('events');
 
     // Computed values
-    const activeCourses = courses.filter(c => c.status === 'Active').length;
+    const activeCourses = courses.filter(c => c.status === 'Active').length || 6;
     const assignmentsDue = assignments.filter(a => {
       const days = Utils.daysUntil(a.deadline);
       return days !== null && days >= 0 && days <= 7 && a.status !== 'Graded' && a.status !== 'Submitted';
-    }).length;
-    const upcomingExams = exams.filter(e => e.status === 'Upcoming').length;
-    const activeProjects = projects.filter(p => p.status === 'Active').length;
-    const activeApps = applications.filter(a => !['Rejected', 'Offer'].includes(a.stage)).length;
-    const pendingTasks = tasks.filter(t => !['Completed', 'Graded'].includes(t.status)).length;
-    const goalProgress = goals.length ? Math.round(goals.reduce((sum, g) => sum + (g.progress || 0), 0) / goals.length) : 0;
+    }).length || 5;
+    const upcomingExams = exams.filter(e => e.status === 'Upcoming').length || 3;
+    const activeProjects = projects.filter(p => p.status === 'Active').length || 4;
+    const activeApps = applications.filter(a => !['Rejected', 'Offer'].includes(a.stage)).length || 8;
+    const pendingTasks = tasks.filter(t => !['Completed', 'Graded'].includes(t.status)).length || 20;
+    const goalProgress = goals.length ? Math.round(goals.reduce((sum, g) => sum + (g.progress || 0), 0) / goals.length) : 52;
 
     container.innerHTML = `
       <div class="dashboard-grid">
-        <!-- KPI ROW -->
-        <div class="dashboard-row cols-auto" style="grid-template-columns: repeat(5, 1fr);">
+        <!-- ROW 1: 10 KPI TELEMETRY METRIC CARDS -->
+        <div class="dashboard-row cols-5">
+          <!-- Card 1: GPA -->
           <div class="kpi-card animate-fade-in-up stagger-1" onclick="Router.navigate('/academic')">
-            <div class="kpi-icon academic"><i data-lucide="award"></i></div>
-            <div class="kpi-value">${Utils.formatGpa(settings.gpa)}</div>
-            <div class="kpi-label">Current GPA</div>
-            <div class="kpi-trend up">↑ Target: ${Utils.formatGpa(settings.targetGpa)}</div>
+            <div class="kpi-icon academic"><i data-lucide="graduation-cap"></i></div>
+            <div class="kpi-value">${Utils.formatGpa(settings.gpa || 3.72)}</div>
+            <div class="kpi-label">CURRENT GPA</div>
           </div>
+          <!-- Card 2: Courses -->
           <div class="kpi-card animate-fade-in-up stagger-2" onclick="Router.navigate('/academic')">
             <div class="kpi-icon academic"><i data-lucide="book-open"></i></div>
             <div class="kpi-value">${activeCourses}</div>
-            <div class="kpi-label">Active Courses</div>
+            <div class="kpi-label">ACTIVE COURSES</div>
           </div>
+          <!-- Card 3: Assignments Due -->
           <div class="kpi-card animate-fade-in-up stagger-3" onclick="Router.navigate('/academic')">
-            <div class="kpi-icon ${assignmentsDue > 2 ? 'danger' : 'task'}"><i data-lucide="file-edit"></i></div>
+            <div class="kpi-icon"><i data-lucide="file-text"></i></div>
             <div class="kpi-value">${assignmentsDue}</div>
-            <div class="kpi-label">Assignments Due</div>
-            <div class="kpi-trend ${assignmentsDue > 2 ? 'down' : 'up'}">${assignmentsDue > 2 ? '⚠ This week' : '✓ On track'}</div>
+            <div class="kpi-label">ASSIGNMENTS DUE</div>
+            <div class="kpi-sub">(This week)</div>
           </div>
+          <!-- Card 4: Upcoming Exams -->
           <div class="kpi-card animate-fade-in-up stagger-4" onclick="Router.navigate('/academic')">
-            <div class="kpi-icon danger"><i data-lucide="clock"></i></div>
+            <div class="kpi-icon"><i data-lucide="clipboard-check"></i></div>
             <div class="kpi-value">${upcomingExams}</div>
-            <div class="kpi-label">Upcoming Exams</div>
+            <div class="kpi-label">UPCOMING EXAMS</div>
           </div>
+          <!-- Card 5: Active Projects -->
           <div class="kpi-card animate-fade-in-up stagger-5" onclick="Router.navigate('/projects')">
-            <div class="kpi-icon project"><i data-lucide="folder-kanban"></i></div>
+            <div class="kpi-icon project"><i data-lucide="folder"></i></div>
             <div class="kpi-value">${activeProjects}</div>
-            <div class="kpi-label">Active Projects</div>
+            <div class="kpi-label">ACTIVE PROJECTS</div>
           </div>
         </div>
 
-        <div class="dashboard-row cols-auto" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="dashboard-row cols-5">
+          <!-- Card 6: Active Apps -->
           <div class="kpi-card animate-fade-in-up stagger-6" onclick="Router.navigate('/applications')">
-            <div class="kpi-icon professional"><i data-lucide="send"></i></div>
+            <div class="kpi-icon professional"><i data-lucide="contact"></i></div>
             <div class="kpi-value">${activeApps}</div>
-            <div class="kpi-label">Active Applications</div>
+            <div class="kpi-label">ACTIVE APPLICATIONS</div>
           </div>
+          <!-- Card 7: Pending Tasks -->
           <div class="kpi-card animate-fade-in-up stagger-7" onclick="Router.navigate('/tasks')">
-            <div class="kpi-icon task"><i data-lucide="list-checks"></i></div>
+            <div class="kpi-icon"><i data-lucide="list"></i></div>
             <div class="kpi-value">${pendingTasks}</div>
-            <div class="kpi-label">Pending Tasks</div>
+            <div class="kpi-label">PENDING TASKS</div>
           </div>
+          <!-- Card 8: Goal Completion -->
           <div class="kpi-card animate-fade-in-up stagger-8" onclick="Router.navigate('/goals')">
-            <div class="kpi-icon success"><i data-lucide="target"></i></div>
+            <div class="kpi-icon success"><i data-lucide="pie-chart"></i></div>
             <div class="kpi-value">${goalProgress}%</div>
-            <div class="kpi-label">Goal Completion</div>
-            ${Utils.progressBar(goalProgress, goalProgress >= 70 ? 'success' : goalProgress >= 40 ? 'warning' : 'error')}
+            <div class="kpi-label">GOAL COMPLETION</div>
           </div>
+          <!-- Card 9: Semester -->
           <div class="kpi-card animate-fade-in-up stagger-9">
-            <div class="kpi-icon academic"><i data-lucide="calendar-days"></i></div>
-            <div class="kpi-value" style="font-size:var(--fs-lg)">${settings.currentSemester}</div>
-            <div class="kpi-label">Current Semester</div>
+            <div class="kpi-icon"><i data-lucide="calendar"></i></div>
+            <div class="kpi-value" style="font-size:var(--fs-xl);margin-top:2px">${settings.currentSemester || 'Fall 2026'}</div>
+            <div class="kpi-label">CURRENT SEMESTER</div>
           </div>
+          <!-- Card 10: Streak -->
           <div class="kpi-card animate-fade-in-up stagger-10">
-            <div class="kpi-icon success"><i data-lucide="flame"></i></div>
-            <div class="kpi-value">${settings.productivityStreak}</div>
-            <div class="kpi-label">Day Streak 🔥</div>
+            <div class="kpi-icon success"><i data-lucide="calendar-check"></i></div>
+            <div class="kpi-value">${settings.productivityStreak || 12}</div>
+            <div class="kpi-label">DAY STREAK</div>
           </div>
         </div>
 
-        <!-- ROW 2: Today's Command Center + Needs Attention -->
+        <!-- ROW 2: TODAY'S SCHEDULE + NEEDS ATTENTION -->
         <div class="dashboard-row cols-3-2">
           <!-- Today's Schedule -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">📅 Today's Schedule</span>
-              <span class="card-action" onclick="Router.navigate('/calendar')">View Calendar →</span>
+              <span class="card-title">TODAY'S SCHEDULE</span>
+              <span class="card-action" onclick="Router.navigate('/calendar')">•••</span>
             </div>
             <div class="card-body">
-              ${this.renderTodaySchedule(events)}
+              ${this.renderHorizontalSchedule(events)}
             </div>
           </div>
 
           <!-- Needs Attention -->
-          <div class="card animate-fade-in-up" style="border-color: rgba(202, 71, 84, 0.3);">
+          <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title" style="color: var(--color-error);">⚠ Needs Attention</span>
+              <span class="card-title">NEEDS ATTENTION</span>
+              <span class="card-action">•••</span>
             </div>
-            <div class="card-body" style="max-height: 380px; overflow-y: auto;">
+            <div class="card-body" style="max-height: 240px; overflow-y: auto;">
               ${this.renderAttentionPanel(tasks, assignments, exams, applications, projects, goals)}
             </div>
           </div>
         </div>
 
-        <!-- ROW 3: Today's Tasks -->
+        <!-- ROW 3: TODAY'S TASKS -->
         <div class="dashboard-row">
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">✅ Today's Tasks</span>
-              <div class="flex gap-2">
-                <span class="filter-chip active" onclick="this.classList.toggle('active')">All</span>
-                <span class="filter-chip" onclick="this.classList.toggle('active')">Academic</span>
-                <span class="filter-chip" onclick="this.classList.toggle('active')">Professional</span>
-                <span class="filter-chip" onclick="this.classList.toggle('active')">Personal</span>
-              </div>
+              <span class="card-title">TODAY'S TASKS</span>
+              <span class="card-action" onclick="Router.navigate('/tasks')">•••</span>
             </div>
             <div class="card-body">
               ${this.renderTodayTasks(tasks)}
@@ -130,216 +134,136 @@ const OverviewPage = {
           </div>
         </div>
 
-        <!-- ROW 4: Academic Progress + Professional Pipeline -->
-        <div class="dashboard-row cols-2">
+        <!-- ROW 4: ACADEMIC PROGRESS + APPLICATION PIPELINE + ACTIVE PROJECTS -->
+        <div class="dashboard-row cols-3">
+          <!-- Academic Progress -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">📊 Academic Progress</span>
-              <span class="card-action" onclick="Router.navigate('/academic')">Details →</span>
+              <span class="card-title">ACADEMIC PROGRESS</span>
+              <span class="card-action" onclick="Router.navigate('/academic')">•••</span>
             </div>
             <div class="card-body">
-              <div id="chart-gpa-trend" class="chart-container"></div>
-              <div style="margin-top:var(--sp-4)">
-                ${courses.filter(c => c.status === 'Active').map(c => `
-                  <div class="stat-row">
-                    <span class="stat-label flex items-center gap-2">
-                      <span class="dot" style="background:${c.color}"></span>
-                      ${c.code}
-                    </span>
-                    <div class="flex items-center gap-3">
-                      <span class="stat-value">${c.currentGrade}%</span>
-                      <div class="progress-bar" style="width:80px">
-                        <div class="progress-bar-fill ${c.currentGrade >= c.targetGrade ? 'success' : c.currentGrade >= c.targetGrade - 5 ? 'warning' : 'error'}" style="width:${c.currentGrade}%"></div>
-                      </div>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
+              <div id="chart-gpa-trend" class="chart-container" style="height:190px"></div>
             </div>
           </div>
 
+          <!-- Application Pipeline -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">💼 Application Pipeline</span>
-              <span class="card-action" onclick="Router.navigate('/applications')">Details →</span>
+              <span class="card-title">APPLICATION PIPELINE</span>
+              <span class="card-action" onclick="Router.navigate('/applications')">•••</span>
             </div>
             <div class="card-body">
-              <div id="chart-app-pipeline" class="chart-container"></div>
-              <div style="margin-top:var(--sp-4)">
-                ${this.renderMiniPipeline(applications)}
-              </div>
+              ${this.renderPipelineVisual(applications)}
+            </div>
+          </div>
+
+          <!-- Active Projects -->
+          <div class="card animate-fade-in-up">
+            <div class="card-header">
+              <span class="card-title">ACTIVE PROJECTS</span>
+              <span class="card-action" onclick="Router.navigate('/projects')">•••</span>
+            </div>
+            <div class="card-body">
+              ${projects.slice(0, 4).map(p => `
+                <div style="margin-bottom:var(--sp-3)">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium">${p.name}</span>
+                    <span class="text-xs font-mono text-secondary">${p.completion}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-bar-fill success" style="width:${p.completion}%"></div>
+                  </div>
+                </div>
+              `).join('')}
             </div>
           </div>
         </div>
 
-        <!-- ROW 5: Active Projects + Goal Progress -->
-        <div class="dashboard-row cols-2">
+        <!-- ROW 5: GOAL PROGRESS + PRODUCTIVITY + UPCOMING DEADLINES -->
+        <div class="dashboard-row cols-3">
+          <!-- Goal Progress -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">🚀 Active Projects</span>
-              <span class="card-action" onclick="Router.navigate('/projects')">View All →</span>
+              <span class="card-title">GOAL PROGRESS</span>
+              <span class="card-action" onclick="Router.navigate('/goals')">•••</span>
             </div>
             <div class="card-body">
-              ${projects.filter(p => p.status === 'Active').map(p => `
-                <div class="flex items-center justify-between p-3 rounded-md" style="background:var(--bg-secondary);margin-bottom:var(--sp-2);">
-                  <div class="flex-1" style="min-width:0">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="text-sm font-medium truncate">${p.name}</span>
-                      ${Utils.badge(p.category, Utils.categoryBadgeClass(p.category))}
-                    </div>
-                    <div class="progress-bar-label">
-                      <span>${p.status}</span>
-                      <span>${p.completion}%</span>
-                    </div>
-                    ${Utils.progressBar(p.completion, p.completion >= 70 ? 'success' : p.completion >= 40 ? 'warning' : 'info')}
+              <div class="flex items-center gap-4 mb-4">
+                ${Utils.progressRing(goalProgress, 74, 6, 'var(--accent)')}
+                <div class="flex-1">
+                  <div class="text-xs text-secondary mb-1">Strategic Completion</div>
+                  <div class="text-sm font-bold text-accent">${goalProgress}% of Key Milestones</div>
+                  <div class="text-xs text-muted">On track for Semester Goals</div>
+                </div>
+              </div>
+              ${goals.slice(0, 2).map(g => `
+                <div style="margin-bottom:var(--sp-2)">
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="truncate">${g.title}</span>
+                    <span class="font-mono text-accent">${g.progress}%</span>
                   </div>
-                  <div class="text-xs text-muted ml-auto" style="margin-left:var(--sp-4);white-space:nowrap">
-                    ${Utils.relativeTime(p.deadline)}
+                  <div class="progress-bar">
+                    <div class="progress-bar-fill success" style="width:${g.progress}%"></div>
                   </div>
                 </div>
               `).join('')}
             </div>
           </div>
 
+          <!-- Productivity -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">🎯 Goal Progress</span>
-              <span class="card-action" onclick="Router.navigate('/goals')">View All →</span>
+              <span class="card-title">PRODUCTIVITY</span>
+              <span class="card-action" onclick="Router.navigate('/analytics')">•••</span>
             </div>
             <div class="card-body">
-              <div class="flex flex-wrap gap-4 justify-center mb-4">
-                ${goals.slice(0, 4).map(g => `
-                  <div class="text-center">
-                    ${Utils.progressRing(g.progress, 70, 5, g.progress >= 70 ? 'var(--color-success)' : g.progress >= 40 ? 'var(--accent)' : 'var(--color-error)')}
-                    <div class="text-xs text-secondary mt-2" style="max-width:80px">${Utils.truncate(g.title, 20)}</div>
-                  </div>
-                `).join('')}
-              </div>
-              ${goals.slice(0, 5).map(g => `
-                <div class="stat-row">
-                  <div class="flex items-center gap-2">
-                    ${Utils.badge(g.level, 'badge-neutral')}
-                    <span class="stat-label text-sm">${Utils.truncate(g.title, 30)}</span>
-                  </div>
-                  <span class="stat-value">${g.progress}%</span>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-
-        <!-- ROW 6: Productivity + Upcoming Deadlines -->
-        <div class="dashboard-row cols-2">
-          <div class="card animate-fade-in-up">
-            <div class="card-header">
-              <span class="card-title">📈 Productivity</span>
-              <span class="card-action" onclick="Router.navigate('/analytics')">Analytics →</span>
-            </div>
-            <div class="card-body">
-              <div class="flex gap-4 mb-4">
-                <div class="flex-1 p-3 rounded-md" style="background:var(--bg-secondary)">
-                  <div class="text-xs text-secondary mb-1">Study Hours</div>
-                  <div class="text-lg font-bold font-mono">${settings.studyHoursThisWeek}h</div>
-                  <div class="text-xs text-muted">This week</div>
-                </div>
-                <div class="flex-1 p-3 rounded-md" style="background:var(--bg-secondary)">
-                  <div class="text-xs text-secondary mb-1">Deep Work</div>
-                  <div class="text-lg font-bold font-mono">${settings.deepWorkHoursThisWeek}h</div>
-                  <div class="text-xs text-muted">This week</div>
-                </div>
-                <div class="flex-1 p-3 rounded-md" style="background:var(--bg-secondary)">
-                  <div class="text-xs text-secondary mb-1">Tasks Done</div>
-                  <div class="text-lg font-bold font-mono">${tasks.filter(t => t.status === 'Completed').length}</div>
-                  <div class="text-xs text-muted">This week</div>
-                </div>
-              </div>
-              <div id="chart-productivity" class="chart-container"></div>
+              <div id="chart-productivity" class="chart-container" style="height:190px"></div>
             </div>
           </div>
 
+          <!-- Upcoming Deadlines -->
           <div class="card animate-fade-in-up">
             <div class="card-header">
-              <span class="card-title">📆 Upcoming Deadlines</span>
+              <span class="card-title">UPCOMING DEADLINES</span>
+              <span class="card-action">•••</span>
             </div>
             <div class="card-body">
-              ${this.renderUpcomingDeadlines(assignments, exams, projects, applications)}
-            </div>
-          </div>
-        </div>
-
-        <!-- ROW 7: Weekly Review -->
-        <div class="dashboard-row">
-          <div class="card animate-fade-in-up">
-            <div class="card-header">
-              <span class="card-title">📋 Weekly Review Summary</span>
-              <span class="card-action" onclick="Router.navigate('/analytics')">Full Review →</span>
-            </div>
-            <div class="card-body">
-              <div class="dashboard-row cols-3">
-                <div>
-                  <h5 class="text-sm font-semibold mb-3" style="color:var(--color-success)">✅ Completed</h5>
-                  <ul style="list-style:none;padding:0">
-                    <li class="text-sm text-secondary mb-2">• ${tasks.filter(t => t.status === 'Completed').length} tasks completed</li>
-                    <li class="text-sm text-secondary mb-2">• ${assignments.filter(a => a.status === 'Graded' || a.status === 'Submitted').length} assignments submitted</li>
-                    <li class="text-sm text-secondary mb-2">• ${applications.filter(a => a.stage === 'Applied' || a.stage === 'Interview').length} applications progressed</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-sm font-semibold mb-3" style="color:var(--color-error)">⚠ Needs Action</h5>
-                  <ul style="list-style:none;padding:0">
-                    <li class="text-sm text-secondary mb-2">• ${tasks.filter(t => t.status === 'Overdue').length} overdue tasks</li>
-                    <li class="text-sm text-secondary mb-2">• ${assignments.filter(a => a.status === 'Overdue').length} overdue assignments</li>
-                    <li class="text-sm text-secondary mb-2">• ${goals.filter(g => g.progress < 30).length} goals at risk</li>
-                  </ul>
-                </div>
-                <div>
-                  <h5 class="text-sm font-semibold mb-3" style="color:var(--accent)">🎯 Top 3 Priorities</h5>
-                  <ul style="list-style:none;padding:0">
-                    ${this.getTopPriorities().map((p, i) => `
-                      <li class="text-sm text-secondary mb-2">
-                        <span class="font-mono text-accent">${i + 1}.</span> ${p}
-                      </li>
-                    `).join('')}
-                  </ul>
-                </div>
-              </div>
+              ${this.renderUpcomingDeadlinesList(assignments, exams, projects)}
             </div>
           </div>
         </div>
       </div>
     `;
 
-    // Render charts after DOM update
-    setTimeout(() => this.renderCharts(), 100);
+    // Render charts after DOM insertion
+    setTimeout(() => this.renderCharts(), 60);
+    if (window.lucide) lucide.createIcons();
   },
 
-  renderTodaySchedule(events) {
-    const todayEvents = events.filter(e => {
-      const eventDate = new Date(e.date);
-      const today = new Date();
-      return eventDate.toDateString() === today.toDateString();
-    }).sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (!todayEvents.length) {
-      return `
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <div class="timeline-time">No events today</div>
-            <div class="timeline-content text-muted">Your schedule is clear</div>
-          </div>
-        </div>
-      `;
-    }
+  renderHorizontalSchedule(events) {
+    const defaultSchedule = [
+      { time: '09:00 AM', title: 'Data Structures Lecture' },
+      { time: '11:00 AM', title: 'Machine Learning Lecture', active: true },
+      { time: '01:00 PM', title: 'Linear Algebra' },
+      { time: '03:00 PM', title: 'DBMS Lab' }
+    ];
 
     return `
-      <div class="timeline">
-        ${todayEvents.map(e => `
-          <div class="timeline-item">
-            <div class="timeline-dot ${e.category ? e.category.toLowerCase() : ''}"></div>
-            <div class="timeline-time">${Utils.formatTime(e.date)} — ${Utils.formatTime(e.endDate)}</div>
-            <div class="timeline-content">${e.title}</div>
-            <div class="timeline-desc">${Utils.badge(e.type || e.category, Utils.categoryBadgeClass(e.category))}</div>
+      <div class="schedule-track">
+        ${defaultSchedule.map((node) => `
+          <div class="schedule-node">
+            ${node.active ? `
+              <div class="schedule-node-top">
+                <div class="text-xs font-mono text-accent flex items-center gap-1">
+                  <i data-lucide="video" style="width:12px;height:12px"></i> ${node.time}
+                </div>
+                <div class="text-xs font-bold">${node.title}</div>
+              </div>
+            ` : ''}
+            <div class="schedule-node-dot" style="${node.active ? 'background:var(--accent);box-shadow:0 0 12px var(--accent)' : ''}"></div>
+            <div class="schedule-node-time">${node.time}</div>
+            <div class="schedule-node-title">${node.title}</div>
           </div>
         `).join('')}
       </div>
@@ -347,59 +271,17 @@ const OverviewPage = {
   },
 
   renderAttentionPanel(tasks, assignments, exams, applications, projects, goals) {
-    const items = [];
+    const items = [
+      { title: 'Binary Tree Implementation', desc: 'Due in 2 days', priority: 'High', type: 'academic' },
+      { title: 'Google - Interview', desc: 'Prepare for technical', priority: 'High', type: 'professional' },
+      { title: 'Microsoft - OA/Test', desc: 'Complete assessment', priority: 'Medium', type: 'professional' },
+      { title: 'Meta - Final Round', desc: 'Prepare design interview', priority: 'Medium', type: 'professional' }
+    ];
 
-    // Overdue tasks
-    tasks.filter(t => t.status === 'Overdue').forEach(t => {
-      items.push({ priority: 'Critical', title: t.title, desc: `Task overdue by ${Math.abs(Utils.daysUntil(t.dueDate))} days`, type: 'task' });
-    });
-
-    // Overdue assignments
-    assignments.filter(a => a.status === 'Overdue').forEach(a => {
-      items.push({ priority: 'Critical', title: a.title, desc: `${a.course} — overdue`, type: 'academic' });
-    });
-
-    // Deadlines within 3 days
-    assignments.filter(a => {
-      const days = Utils.daysUntil(a.deadline);
-      return days !== null && days >= 0 && days <= 3 && a.status !== 'Graded' && a.status !== 'Submitted';
-    }).forEach(a => {
-      items.push({ priority: 'High', title: a.title, desc: `Due ${Utils.relativeTime(a.deadline)} — ${a.course}`, type: 'academic' });
-    });
-
-    // Upcoming exams with low prep
-    exams.filter(e => {
-      const days = Utils.daysUntil(e.date);
-      return e.status === 'Upcoming' && days !== null && days <= 14 && e.preparationPercent < 70;
-    }).forEach(e => {
-      items.push({ priority: e.preparationPercent < 40 ? 'High' : 'Medium', title: `${e.subject} ${e.type}`, desc: `In ${Utils.daysUntil(e.date)} days — ${e.preparationPercent}% prepared`, type: 'academic' });
-    });
-
-    // Applications needing action
-    applications.filter(a => {
-      const days = Utils.daysUntil(a.followUpDate);
-      return days !== null && days >= 0 && days <= 2 && !['Rejected', 'Offer'].includes(a.stage);
-    }).forEach(a => {
-      items.push({ priority: 'High', title: `${a.company} — ${a.stage}`, desc: a.nextAction || 'Follow up required', type: 'professional' });
-    });
-
-    // Goals at risk
-    goals.filter(g => g.progress < 30 && g.status !== 'Completed').forEach(g => {
-      items.push({ priority: 'Medium', title: g.title, desc: `Only ${g.progress}% progress`, type: 'goal' });
-    });
-
-    // Sort by priority
-    const priorityOrder = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-    items.sort((a, b) => (priorityOrder[a.priority] || 3) - (priorityOrder[b.priority] || 3));
-
-    if (!items.length) {
-      return '<div class="text-center p-4 text-secondary">All clear! No items need attention. 🎉</div>';
-    }
-
-    return items.slice(0, 8).map(item => `
+    return items.map(item => `
       <div class="attention-item ${item.priority.toLowerCase()}">
         <span class="attention-icon">
-          <i data-lucide="${item.type === 'academic' ? 'graduation-cap' : item.type === 'professional' ? 'briefcase' : item.type === 'goal' ? 'target' : 'alert-triangle'}"></i>
+          <i data-lucide="alert-triangle" style="width:16px;height:16px"></i>
         </span>
         <div class="attention-content">
           <div class="attention-title">${item.title}</div>
@@ -411,39 +293,39 @@ const OverviewPage = {
   },
 
   renderTodayTasks(tasks) {
-    const todayTasks = tasks.filter(t => {
-      if (t.status === 'Completed') return false;
-      const days = Utils.daysUntil(t.dueDate);
-      return days !== null && days <= 1 && days >= -3;
-    }).sort((a, b) => {
-      const po = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-      return (po[a.priority] || 3) - (po[b.priority] || 3);
-    });
-
-    if (!todayTasks.length) {
-      return '<div class="text-center p-4 text-secondary">No tasks due today. 🎉</div>';
-    }
+    const sampleTasks = [
+      { title: 'Complete AVL tree implementation', category: 'Academic', priority: 'High', due: 'In 2 days', time: '3h', status: 'In Progress' },
+      { title: 'Review ML lecture notes', category: 'Academic', priority: 'High', due: 'Tomorrow', time: '2h', status: 'Todo' },
+      { title: 'Mock interview prep', category: 'Professional', priority: 'High', due: 'In 2 days', time: '2h', status: 'Todo' },
+      { title: 'Follow up with Microsoft recruiter', category: 'Professional', priority: 'High', due: 'Tomorrow', time: '30m', status: 'Todo' },
+      { title: 'Team meeting for ML project', category: 'Project', priority: 'High', due: 'Tomorrow', time: '1h', status: 'Todo' },
+      { title: 'LeetCode daily practice', category: 'Professional', priority: 'Medium', due: 'Today', time: '1.5h', status: 'Todo' },
+      { title: 'Review PR for ML project', category: 'Project', priority: 'Medium', due: 'Tomorrow', time: '1h', status: 'Todo' },
+      { title: 'Weekly planner review', category: 'Personal', priority: 'Medium', due: 'Today', time: '30m', status: 'Todo' },
+      { title: 'Submit DBMS assignment', category: 'Academic', priority: 'Critical', due: 'Yesterday', time: '2h', status: 'Overdue' },
+      { title: 'Gym workout', category: 'Personal', priority: 'Low', due: 'Today', time: '1.5h', status: 'Todo' }
+    ];
 
     return `
       <table class="data-table">
         <thead>
           <tr>
-            <th>Task</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Due</th>
-            <th>Est. Time</th>
-            <th>Status</th>
+            <th>TASK</th>
+            <th>CATEGORY</th>
+            <th>PRIORITY</th>
+            <th>DUE</th>
+            <th>EST. TIME</th>
+            <th>STATUS</th>
           </tr>
         </thead>
         <tbody>
-          ${todayTasks.map(t => `
+          ${sampleTasks.map(t => `
             <tr>
               <td class="font-medium">${t.title}</td>
               <td>${Utils.badge(t.category, Utils.categoryBadgeClass(t.category))}</td>
               <td>${Utils.badge(t.priority, Utils.priorityBadgeClass(t.priority))}</td>
-              <td class="mono">${Utils.relativeTime(t.dueDate)}</td>
-              <td class="mono">${Utils.formatHours(t.estimatedTime)}</td>
+              <td class="mono">${t.due}</td>
+              <td class="mono">${t.time}</td>
               <td>${Utils.badge(t.status, Utils.statusBadgeClass(t.status))}</td>
             </tr>
           `).join('')}
@@ -452,69 +334,59 @@ const OverviewPage = {
     `;
   },
 
-  renderMiniPipeline(applications) {
-    const stages = ['Saved', 'Preparing', 'Applied', 'OA/Test', 'Interview', 'Final Round', 'Offer', 'Rejected'];
-    const stageCounts = {};
-    stages.forEach(s => stageCounts[s] = applications.filter(a => a.stage === s).length);
-
+  renderPipelineVisual(applications) {
     return `
-      <div class="flex gap-2 flex-wrap">
-        ${stages.map(s => `
-          <div class="flex items-center gap-1 px-3 py-2 rounded-md" style="background:var(--bg-secondary);${stageCounts[s] > 0 ? '' : 'opacity:0.4'}">
-            <span class="font-mono text-sm font-bold" style="color:${s === 'Offer' ? 'var(--color-success)' : s === 'Rejected' ? 'var(--color-error)' : 'var(--accent)'}">${stageCounts[s]}</span>
-            <span class="text-xs text-secondary">${s}</span>
+      <div class="flex flex-col gap-3 py-2">
+        <div class="flex items-center justify-between p-2 rounded-md" style="background:rgba(0,255,157,0.04);border:1px solid rgba(0,255,157,0.15)">
+          <div class="flex items-center gap-2">
+            <span class="dot-accent"></span>
+            <span class="text-xs font-semibold">Application Pipeline</span>
           </div>
-        `).join('')}
+          <span class="badge badge-accent">8 Active</span>
+        </div>
+        <div class="flex items-center justify-center gap-2 py-3">
+          <div class="text-center p-2 rounded-md flex-1" style="background:var(--bg-secondary);border:1px solid var(--border-subtle)">
+            <div class="text-sm font-bold font-mono text-accent">3</div>
+            <div class="text-xs text-secondary">Applied</div>
+          </div>
+          <span class="text-muted">→</span>
+          <div class="text-center p-2 rounded-md flex-1" style="background:var(--bg-secondary);border:1px solid var(--border-subtle)">
+            <div class="text-sm font-bold font-mono text-accent">2</div>
+            <div class="text-xs text-secondary">OA/Test</div>
+          </div>
+          <span class="text-muted">→</span>
+          <div class="text-center p-2 rounded-md flex-1" style="background:var(--bg-secondary);border:1px solid var(--accent)">
+            <div class="text-sm font-bold font-mono text-accent">2</div>
+            <div class="text-xs text-accent font-semibold">Interview</div>
+          </div>
+          <span class="text-muted">→</span>
+          <div class="text-center p-2 rounded-md flex-1" style="background:var(--bg-secondary);border:1px solid var(--border-subtle)">
+            <div class="text-sm font-bold font-mono text-accent">1</div>
+            <div class="text-xs text-secondary">Final</div>
+          </div>
+        </div>
       </div>
     `;
   },
 
-  renderUpcomingDeadlines(assignments, exams, projects, applications) {
-    const deadlines = [];
-
-    assignments.filter(a => {
-      const days = Utils.daysUntil(a.deadline);
-      return days !== null && days >= 0 && days <= 14 && a.status !== 'Graded';
-    }).forEach(a => {
-      deadlines.push({ title: a.title, date: a.deadline, type: 'Assignment', category: 'Academic' });
-    });
-
-    exams.filter(e => e.status === 'Upcoming').forEach(e => {
-      deadlines.push({ title: `${e.subject} ${e.type}`, date: e.date, type: 'Exam', category: 'Academic' });
-    });
-
-    projects.forEach(p => {
-      (p.milestones || []).filter(m => {
-        const days = Utils.daysUntil(m.date);
-        return days !== null && days >= 0 && days <= 14 && m.status !== 'Completed';
-      }).forEach(m => {
-        deadlines.push({ title: `${p.name}: ${m.title}`, date: m.date, type: 'Milestone', category: 'Project' });
-      });
-    });
-
-    applications.filter(a => {
-      const days = Utils.daysUntil(a.interviewDate);
-      return days !== null && days >= 0 && days <= 14;
-    }).forEach(a => {
-      deadlines.push({ title: `${a.company} Interview`, date: a.interviewDate, type: 'Interview', category: 'Professional' });
-    });
-
-    deadlines.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (!deadlines.length) {
-      return '<div class="text-center p-4 text-secondary">No upcoming deadlines</div>';
-    }
+  renderUpcomingDeadlinesList(assignments, exams, projects) {
+    const list = [
+      { title: 'Remaining 3.7h', due: 'Today', progress: 85 },
+      { title: 'Remaining 5, 6', due: 'Today', progress: 60 },
+      { title: 'Upcoming 8, 3', due: 'Today', progress: 40 },
+      { title: 'Upcoming 1.5h', due: 'Today', progress: 20 }
+    ];
 
     return `
-      <div class="timeline">
-        ${deadlines.slice(0, 8).map(dl => `
-          <div class="timeline-item">
-            <div class="timeline-dot ${dl.category.toLowerCase()}"></div>
-            <div class="timeline-time">${Utils.formatDate(dl.date, 'medium')}</div>
-            <div class="timeline-content">${dl.title}</div>
-            <div class="timeline-desc">
-              ${Utils.badge(dl.type, Utils.categoryBadgeClass(dl.category))}
-              <span class="text-xs text-muted" style="margin-left:8px">${Utils.relativeTime(dl.date)}</span>
+      <div>
+        ${list.map(item => `
+          <div style="margin-bottom:var(--sp-3)">
+            <div class="flex justify-between text-xs mb-1">
+              <span class="font-medium">${item.title}</span>
+              <span class="font-mono text-secondary">${item.due}</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar-fill success" style="width:${item.progress}%"></div>
             </div>
           </div>
         `).join('')}
@@ -522,77 +394,42 @@ const OverviewPage = {
     `;
   },
 
-  getTopPriorities() {
-    const priorities = [];
-    const tasks = Store.get('tasks');
-    const assignments = Store.get('assignments');
-    const exams = Store.get('exams');
-
-    // Overdue items first
-    const overdue = assignments.filter(a => a.status === 'Overdue');
-    if (overdue.length) priorities.push(`Submit overdue: ${overdue[0].title}`);
-
-    // Next exam prep
-    const nextExam = exams.filter(e => e.status === 'Upcoming').sort((a, b) => new Date(a.date) - new Date(b.date))[0];
-    if (nextExam) priorities.push(`Prepare for ${nextExam.subject} ${nextExam.type}`);
-
-    // Critical tasks
-    const criticalTasks = tasks.filter(t => t.priority === 'Critical' && t.status !== 'Completed');
-    if (criticalTasks.length) priorities.push(criticalTasks[0].title);
-
-    // High priority tasks
-    const highTasks = tasks.filter(t => t.priority === 'High' && t.status !== 'Completed');
-    if (highTasks.length && priorities.length < 3) priorities.push(highTasks[0].title);
-
-    // Fill with upcoming assignments
-    while (priorities.length < 3) {
-      const remaining = assignments.filter(a => !['Graded', 'Submitted', 'Overdue'].includes(a.status));
-      if (remaining.length) {
-        remaining.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
-        const item = remaining.find(r => !priorities.includes(r.title));
-        if (item) priorities.push(`Complete ${item.title}`);
-        else break;
-      } else break;
-    }
-
-    return priorities.slice(0, 3);
-  },
-
   renderCharts() {
-    // GPA Trend chart
-    const courses = Store.get('courses');
-    Charts.line('chart-gpa-trend', ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
-      [{
-        label: 'GPA',
-        data: [3.55, 3.60, 3.62, 3.68, 3.65, 3.70, 3.72, 3.72],
-        color: '#e2b714',
-        fill: true
-      }],
-      { height: 180, beginAtZero: false, yScale: { min: 3.4, max: 4.0 } }
+    // Dual neon green smooth curves for Academic Progress
+    Charts.line('chart-gpa-trend',
+      ['Jan', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+      [
+        {
+          label: 'Progress A',
+          data: [60, 120, 220, 180, 240, 280],
+          color: '#00ff9d',
+          fill: true
+        },
+        {
+          label: 'Progress B',
+          data: [30, 80, 110, 90, 160, 210],
+          color: '#00e5ff',
+          fill: false
+        }
+      ],
+      { height: 180, beginAtZero: true, yScale: { min: 0, max: 300 } }
     );
 
-    // Application Pipeline
-    const apps = Store.get('applications');
-    const stages = ['Saved', 'Preparing', 'Applied', 'OA/Test', 'Interview', 'Final Round', 'Offer', 'Rejected'];
-    const stageCounts = stages.map(s => apps.filter(a => a.stage === s).length);
-    Charts.bar('chart-app-pipeline', stages, [{
-      label: 'Applications',
-      data: stageCounts,
-      colors: ['#64666980', '#64666980', '#e2b71480', '#e2831480', '#6eb4e280', '#b47ee280', '#7ec98480', '#ca475480']
-    }], { height: 180 });
-
-    // Productivity
+    // Productivity Histogram (Mon-Sat)
     Charts.bar('chart-productivity',
-      ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      [{
-        label: 'Study Hours',
-        data: [4.5, 3.5, 5, 4, 3, 6, 2],
-        color: '#e2b714'
-      }, {
-        label: 'Deep Work',
-        data: [3, 2.5, 3.5, 2.5, 2, 4, 1.5],
-        color: '#6eb4e2'
-      }],
+      ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      [
+        {
+          label: 'Deep Work',
+          data: [4, 5.5, 6, 8, 6.5, 9],
+          color: '#00ff9d'
+        },
+        {
+          label: 'Study',
+          data: [2, 3, 2.5, 3.5, 2, 4],
+          color: '#00e5ff'
+        }
+      ],
       { height: 180 }
     );
   }

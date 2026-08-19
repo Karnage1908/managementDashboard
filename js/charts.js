@@ -1,28 +1,31 @@
 // ============================================
-// CHARTS — Chart.js Wrapper & Configurations
+// CHARTS — Cyber HUD Chart.js Configurations
 // ============================================
 
 const Charts = {
   instances: {},
 
-  // Global Chart.js defaults for Monkeytype theme
+  // Global Chart.js defaults for Cyber HUD theme
   initDefaults() {
     if (!window.Chart) return;
 
-    Chart.defaults.color = '#646669';
-    Chart.defaults.borderColor = 'rgba(100, 102, 105, 0.15)';
+    Chart.defaults.color = '#74968f';
+    Chart.defaults.borderColor = 'rgba(0, 255, 157, 0.08)';
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.font.size = 12;
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
-    Chart.defaults.plugins.legend.labels.pointStyleWidth = 10;
+    Chart.defaults.plugins.legend.labels.pointStyleWidth = 8;
     Chart.defaults.plugins.legend.labels.padding = 16;
-    Chart.defaults.plugins.tooltip.backgroundColor = '#3a3c3f';
+    Chart.defaults.plugins.legend.labels.color = '#74968f';
+    Chart.defaults.plugins.tooltip.backgroundColor = '#0e171a';
+    Chart.defaults.plugins.tooltip.titleColor = '#00ff9d';
+    Chart.defaults.plugins.tooltip.bodyColor = '#e6f9f2';
     Chart.defaults.plugins.tooltip.titleFont = { weight: '600' };
-    Chart.defaults.plugins.tooltip.borderColor = 'rgba(100, 102, 105, 0.3)';
+    Chart.defaults.plugins.tooltip.borderColor = 'rgba(0, 255, 157, 0.35)';
     Chart.defaults.plugins.tooltip.borderWidth = 1;
     Chart.defaults.plugins.tooltip.padding = 10;
     Chart.defaults.plugins.tooltip.cornerRadius = 8;
-    Chart.defaults.animation = { duration: 800, easing: 'easeOutQuart' };
+    Chart.defaults.animation = { duration: 750, easing: 'easeOutQuart' };
     Chart.defaults.responsive = true;
     Chart.defaults.maintainAspectRatio = false;
   },
@@ -36,7 +39,7 @@ const Charts = {
   },
 
   // Get or create canvas in container
-  getCanvas(containerId, height = 250) {
+  getCanvas(containerId, height = 220) {
     const container = document.getElementById(containerId);
     if (!container) return null;
     container.innerHTML = '';
@@ -46,40 +49,58 @@ const Charts = {
     return canvas;
   },
 
-  // Line chart
+  // Line chart with neon glowing gradients
   line(containerId, labels, datasets, options = {}) {
     this.destroy(containerId);
-    const canvas = this.getCanvas(containerId, options.height || 250);
+    const canvas = this.getCanvas(containerId, options.height || 220);
     if (!canvas) return;
 
-    const palette = ['#e2b714', '#6eb4e2', '#7ec984', '#b47ee2', '#e27ea8', '#7ee2c1'];
+    const ctx = canvas.getContext('2d');
+    const palette = ['#00ff9d', '#00e5ff', '#e2b714', '#c084fc', '#f472b6', '#38bdf8'];
 
     this.instances[containerId] = new Chart(canvas, {
       type: 'line',
       data: {
         labels,
-        datasets: datasets.map((ds, i) => ({
-          label: ds.label,
-          data: ds.data,
-          borderColor: ds.color || palette[i % palette.length],
-          backgroundColor: (ds.color || palette[i % palette.length]) + '20',
-          borderWidth: 2,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          tension: 0.4,
-          fill: ds.fill || false,
-          ...ds
-        }))
+        datasets: datasets.map((ds, i) => {
+          const baseColor = ds.color || palette[i % palette.length];
+          let bg = ds.backgroundColor;
+          if (ds.fill && !bg && ctx) {
+            const grad = ctx.createLinearGradient(0, 0, 0, options.height || 220);
+            grad.addColorStop(0, baseColor + '40');
+            grad.addColorStop(1, baseColor + '00');
+            bg = grad;
+          }
+          return {
+            label: ds.label,
+            data: ds.data,
+            borderColor: baseColor,
+            backgroundColor: bg || baseColor + '18',
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointHoverRadius: 6,
+            pointBackgroundColor: baseColor,
+            pointBorderColor: '#0a1012',
+            pointBorderWidth: 2,
+            tension: 0.45,
+            fill: ds.fill !== undefined ? ds.fill : true,
+            ...ds
+          };
+        })
       },
       options: {
         plugins: {
           legend: { display: datasets.length > 1, position: 'top' }
         },
         scales: {
-          x: { grid: { display: false } },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#74968f', font: { family: "'JetBrains Mono', monospace", size: 10 } }
+          },
           y: {
             beginAtZero: options.beginAtZero !== false,
-            grid: { color: 'rgba(100,102,105,0.1)' },
+            grid: { color: 'rgba(0, 255, 157, 0.06)' },
+            ticks: { color: '#74968f', font: { family: "'JetBrains Mono', monospace", size: 10 } },
             ...options.yScale
           }
         },
@@ -91,10 +112,10 @@ const Charts = {
   // Bar chart
   bar(containerId, labels, datasets, options = {}) {
     this.destroy(containerId);
-    const canvas = this.getCanvas(containerId, options.height || 250);
+    const canvas = this.getCanvas(containerId, options.height || 220);
     if (!canvas) return;
 
-    const palette = ['#e2b714', '#6eb4e2', '#7ec984', '#b47ee2', '#e27ea8', '#7ee2c1'];
+    const palette = ['#00ff9d', '#00e5ff', '#e2b714', '#c084fc', '#f472b6', '#38bdf8'];
 
     this.instances[containerId] = new Chart(canvas, {
       type: 'bar',
@@ -103,10 +124,10 @@ const Charts = {
         datasets: datasets.map((ds, i) => ({
           label: ds.label,
           data: ds.data,
-          backgroundColor: ds.colors || (ds.color || palette[i % palette.length]) + '80',
-          borderColor: ds.colors ? ds.colors.map(c => c.replace('80', 'ff')) : (ds.color || palette[i % palette.length]),
+          backgroundColor: ds.colors || (ds.color || palette[i % palette.length]) + 'aa',
+          borderColor: ds.colors ? ds.colors.map(c => c.replace('aa', 'ff')) : (ds.color || palette[i % palette.length]),
           borderWidth: 1,
-          borderRadius: 4,
+          borderRadius: 6,
           ...ds
         }))
       },
@@ -115,10 +136,14 @@ const Charts = {
           legend: { display: datasets.length > 1, position: 'top' }
         },
         scales: {
-          x: { grid: { display: false } },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#74968f', font: { family: "'JetBrains Mono', monospace", size: 10 } }
+          },
           y: {
             beginAtZero: true,
-            grid: { color: 'rgba(100,102,105,0.1)' },
+            grid: { color: 'rgba(0, 255, 157, 0.06)' },
+            ticks: { color: '#74968f', font: { family: "'JetBrains Mono', monospace", size: 10 } },
             ...options.yScale
           }
         },
@@ -130,10 +155,10 @@ const Charts = {
   // Doughnut chart
   doughnut(containerId, labels, data, options = {}) {
     this.destroy(containerId);
-    const canvas = this.getCanvas(containerId, options.height || 220);
+    const canvas = this.getCanvas(containerId, options.height || 200);
     if (!canvas) return;
 
-    const palette = options.colors || ['#e2b714', '#6eb4e2', '#7ec984', '#b47ee2', '#e27ea8', '#7ee2c1', '#e28314', '#ca4754'];
+    const palette = options.colors || ['#00ff9d', '#00e5ff', '#e2b714', '#c084fc', '#f472b6', '#38bdf8', '#fb923c', '#ff385c'];
 
     this.instances[containerId] = new Chart(canvas, {
       type: 'doughnut',
@@ -142,15 +167,15 @@ const Charts = {
         datasets: [{
           data,
           backgroundColor: palette.slice(0, data.length),
-          borderColor: '#323437',
+          borderColor: '#0a1012',
           borderWidth: 2,
           hoverOffset: 6
         }]
       },
       options: {
-        cutout: options.cutout || '70%',
+        cutout: options.cutout || '72%',
         plugins: {
-          legend: { position: options.legendPosition || 'right', labels: { padding: 12 } }
+          legend: { position: options.legendPosition || 'right', labels: { padding: 12, color: '#74968f' } }
         },
         ...options.chartOptions
       }
@@ -160,10 +185,10 @@ const Charts = {
   // Radar chart
   radar(containerId, labels, datasets, options = {}) {
     this.destroy(containerId);
-    const canvas = this.getCanvas(containerId, options.height || 300);
+    const canvas = this.getCanvas(containerId, options.height || 280);
     if (!canvas) return;
 
-    const palette = ['#e2b714', '#6eb4e2', '#7ec984'];
+    const palette = ['#00ff9d', '#00e5ff', '#e2b714'];
 
     this.instances[containerId] = new Chart(canvas, {
       type: 'radar',
@@ -173,10 +198,11 @@ const Charts = {
           label: ds.label,
           data: ds.data,
           borderColor: ds.color || palette[i % palette.length],
-          backgroundColor: (ds.color || palette[i % palette.length]) + '20',
+          backgroundColor: (ds.color || palette[i % palette.length]) + '25',
           borderWidth: 2,
           pointRadius: 3,
-          pointHoverRadius: 5,
+          pointHoverRadius: 6,
+          pointBackgroundColor: ds.color || palette[i % palette.length],
           ...ds
         }))
       },
@@ -186,9 +212,9 @@ const Charts = {
             beginAtZero: true,
             max: options.max || 100,
             ticks: { stepSize: options.stepSize || 20, display: false },
-            grid: { color: 'rgba(100,102,105,0.15)' },
-            angleLines: { color: 'rgba(100,102,105,0.15)' },
-            pointLabels: { font: { size: 11 } }
+            grid: { color: 'rgba(0, 255, 157, 0.12)' },
+            angleLines: { color: 'rgba(0, 255, 157, 0.12)' },
+            pointLabels: { color: '#74968f', font: { size: 11 } }
           }
         },
         plugins: {
@@ -202,10 +228,10 @@ const Charts = {
   // Horizontal bar chart
   horizontalBar(containerId, labels, datasets, options = {}) {
     this.destroy(containerId);
-    const canvas = this.getCanvas(containerId, options.height || 300);
+    const canvas = this.getCanvas(containerId, options.height || 280);
     if (!canvas) return;
 
-    const palette = ['#e2b71480', '#6eb4e280'];
+    const palette = ['#00ff9daa', '#00e5ffaa'];
 
     this.instances[containerId] = new Chart(canvas, {
       type: 'bar',
@@ -215,7 +241,7 @@ const Charts = {
           label: ds.label,
           data: ds.data,
           backgroundColor: ds.color || palette[i % palette.length],
-          borderColor: (ds.color || palette[i % palette.length]).replace('80', 'ff'),
+          borderColor: (ds.color || palette[i % palette.length]).replace('aa', 'ff'),
           borderWidth: 1,
           borderRadius: 4,
           ...ds
@@ -230,9 +256,13 @@ const Charts = {
           x: {
             beginAtZero: true,
             max: options.max || undefined,
-            grid: { color: 'rgba(100,102,105,0.1)' }
+            grid: { color: 'rgba(0, 255, 157, 0.06)' },
+            ticks: { color: '#74968f' }
           },
-          y: { grid: { display: false } }
+          y: {
+            grid: { display: false },
+            ticks: { color: '#74968f' }
+          }
         },
         ...options.chartOptions
       }

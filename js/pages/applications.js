@@ -31,7 +31,7 @@ const ApplicationsPage = {
       </div>
 
       <!-- Quick Funnel Stats -->
-      <div class="dashboard-row cols-auto mb-6" style="grid-template-columns: repeat(4, 1fr);">
+      <div class="dashboard-row cols-4 mb-6">
         <div class="kpi-card">
           <div class="kpi-label">Applied Total</div>
           <div class="kpi-value text-accent">${applications.length}</div>

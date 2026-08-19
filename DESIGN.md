@@ -1,14 +1,15 @@
-# Design System & UX Specification
+# Command — Design System & UX Specification (Cyber Neon Edition)
 
-## Design Goal
+## Design Vision & Identity
 
-Create a high-information personal management interface that feels like an executive command center rather than a simple spreadsheet or to-do list.
+**Command** is a next-generation, high-density personal academic and professional operations system designed as a futuristic Cyber/Matrix-inspired executive HUD (Heads-Up Display). It transforms fragmented academic tracking, career recruitment pipelines, project milestones, and personal productivity into a cohesive, radiant command console.
 
-The design philosophy is heavily inspired by **Monkeytype's Serika Dark palette** and modern minimalist dashboards:
-- **Calm and Focused**: Low-distraction dark theme (`#323437`) with golden yellow (`#e2b714`) accents.
-- **High Information Density**: Progressive disclosure, compact metadata, tabular numeric formatting.
-- **Fluid Micro-Animations**: Smooth entry transitions, hover lifts, progress fill animations.
-- **Zero Build Step**: Native CSS custom properties and ES6 modules.
+### Aesthetic Principles
+- **Cyber Dark Canvas**: Deep, immersive obsidian void (`#0a1012`, `#0d1518`) with glassmorphism layers and ambient matrix luminescences.
+- **Radiant Emerald Accent**: Vibrant cyber-neon emerald (`#00ff9d`) with electric glow effects, high contrast readability, and status-driven chromatic hierarchy.
+- **High Information Density (HUD)**: Compact telemetry cards, monospace data streams (`JetBrains Mono`), tabular metrics, and visual execution flows.
+- **Micro-Luminescence & Tactility**: Smooth glow halos, border shimmer on hover, fluid animations, and crisp SVG radial gauges.
+- **Zero Build Dependency**: 100% native ES6 modules, CSS Custom Properties, and modular component architecture.
 
 ---
 
@@ -17,127 +18,151 @@ The design philosophy is heavily inspired by **Monkeytype's Serika Dark palette*
 ```css
 :root {
   /* Surface & Backgrounds */
-  --bg-primary: #323437;       /* Main canvas background */
-  --bg-secondary: #2c2e31;     /* Sidebar & component secondary backgrounds */
-  --bg-tertiary: #1e1f21;      /* Deep contrast base */
-  --bg-card: #3a3c3f;          /* Surface card fill */
-  --bg-card-hover: #444648;    /* Interactive card hover */
-  --bg-input: #2c2e31;         /* Form input fill */
-  --bg-overlay: rgba(30, 31, 33, 0.85);
+  --bg-primary: #0a1012;       /* Main cyber canvas backdrop */
+  --bg-secondary: #0d1518;     /* Sidebar & panel background */
+  --bg-tertiary: #060a0b;      /* Deep contrast base */
+  --bg-card: #0e171a;          /* Surface card fill */
+  --bg-card-hover: #132226;    /* Interactive card hover */
+  --bg-input: #0b1417;         /* Form input fill */
+  --bg-overlay: rgba(6, 11, 13, 0.88);
 
-  /* Primary Accent */
-  --accent: #e2b714;           /* Monkeytype golden yellow */
-  --accent-hover: #f0c928;
-  --accent-dim: rgba(226, 183, 20, 0.15);
-  --accent-glow: rgba(226, 183, 20, 0.25);
+  /* Primary Accent — Cyber Neon Emerald */
+  --accent: #00ff9d;           /* Radiant Matrix Green */
+  --accent-hover: #33ffb1;
+  --accent-dim: rgba(0, 255, 157, 0.12);
+  --accent-glow: rgba(0, 255, 157, 0.28);
+  --accent-subtle: rgba(0, 255, 157, 0.05);
 
   /* Typography */
-  --text-primary: #d1d0c5;     /* High contrast off-white text */
-  --text-secondary: #646669;   /* Subtext & labels */
-  --text-muted: #4a4c4f;       /* Inactive metadata */
-  --text-accent: #e2b714;
+  --text-primary: #e6f9f2;     /* Crisp high-contrast text */
+  --text-secondary: #74968f;   /* Cyber teal subtext & labels */
+  --text-muted: #45635c;       /* Inactive metadata */
+  --text-accent: #00ff9d;      /* Radiant accent text */
+  --text-on-accent: #04140d;   /* Dark text for vibrant buttons */
 
   /* Status Tokens */
-  --color-success: #7ec984;    /* Green */
-  --color-warning: #e2b714;    /* Yellow */
-  --color-error: #ca4754;      /* Red */
-  --color-info: #6eb4e2;       /* Cyan */
+  --color-success: #00ff9d;    /* Neon Emerald */
+  --color-success-dim: rgba(0, 255, 157, 0.14);
+  --color-warning: #e2b714;    /* Cyber Gold */
+  --color-warning-dim: rgba(226, 183, 20, 0.15);
+  --color-error: #ff385c;      /* Neon Crimson */
+  --color-error-dim: rgba(255, 56, 92, 0.15);
+  --color-info: #00e5ff;       /* Electric Cyan */
+  --color-info-dim: rgba(0, 229, 255, 0.15);
 
   /* Priority Levels */
-  --priority-critical: #ca4754;
-  --priority-high: #e28314;
+  --priority-critical: #ff385c;
+  --priority-high: #00ff9d;
   --priority-medium: #e2b714;
-  --priority-low: #7ec984;
+  --priority-low: #00e5ff;
 
   /* Categories */
-  --cat-academic: #6eb4e2;
-  --cat-professional: #b47ee2;
-  --cat-personal: #e27ea8;
-  --cat-project: #7ee2c1;
+  --cat-academic: #00e5ff;     /* Cyan */
+  --cat-professional: #c084fc; /* Lavender Purple */
+  --cat-personal: #f472b6;     /* Neon Pink */
+  --cat-project: #00ff9d;      /* Emerald */
+
+  /* Chart Palette */
+  --chart-1: #00ff9d;
+  --chart-2: #00e5ff;
+  --chart-3: #e2b714;
+  --chart-4: #c084fc;
+  --chart-5: #f472b6;
+  --chart-6: #38bdf8;
+  --chart-7: #fb923c;
+  --chart-8: #ff385c;
+
+  /* Borders & Cyber Glows */
+  --border-subtle: 1px solid rgba(0, 255, 157, 0.18);
+  --border-medium: 1px solid rgba(0, 255, 157, 0.32);
+  --border-glow: 1px solid rgba(0, 255, 157, 0.6);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 1px rgba(0, 255, 157, 0.2);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 12px rgba(0, 255, 157, 0.15);
+  --shadow-glow: 0 0 20px var(--accent-glow);
 }
 ```
 
 ---
 
-## Typography
+## Typography Hierarchy
 
-- **Body & Headings**: `Inter`, `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, `sans-serif`
-- **Numbers, Dates, & Code**: `JetBrains Mono`, `Fira Code`, `monospace`
+- **Interface Body & Headings**: `Inter`, `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, `sans-serif`
+- **Data Streams, KPI Values, Timestamps & Code**: `JetBrains Mono`, `Fira Code`, `monospace`
 
-```css
---fs-xs: 0.6875rem;   /* 11px */
---fs-sm: 0.75rem;     /* 12px */
---fs-base: 0.875rem;  /* 14px */
---fs-md: 1rem;        /* 16px */
---fs-lg: 1.125rem;    /* 18px */
---fs-xl: 1.375rem;    /* 22px */
---fs-2xl: 1.75rem;    /* 28px */
---fs-3xl: 2.25rem;    /* 36px */
-```
+| Token | Size | Line Height | Weight | Typical Application |
+|---|---|---|---|---|
+| `--fs-xs` | 0.6875rem (11px) | 1.2 | 500/600 | Badges, timestamps, small tags |
+| `--fs-sm` | 0.75rem (12px) | 1.4 | 400/500 | Metadata, table cells, form labels |
+| `--fs-base`| 0.875rem (14px) | 1.5 | 400/500 | Standard body copy, list items |
+| `--fs-md` | 1.0rem (16px) | 1.4 | 600 | Card titles, subheadings |
+| `--fs-lg` | 1.125rem (18px) | 1.3 | 600/700 | Section headers, modal titles |
+| `--fs-xl` | 1.375rem (22px) | 1.2 | 700 | Main titles, large callouts |
+| `--fs-2xl`| 1.75rem (28px) | 1.1 | 700/800 | Top KPI Values, Page headings |
+| `--fs-3xl`| 2.25rem (36px) | 1.0 | 800 | Main Hero Stats |
 
 ---
 
-## Information Hierarchy & Layouts
+## Layout & HUD Architecture
 
-### Application Shell
-1. **Sidebar Navigation (`#sidebar`)**:
-   - Fixed 260px width (collapsible to 72px icon rail).
-   - Grouped sections: `Dashboard`, `Management`, `Tracking`, `Growth`, `Resources`.
-   - Real-time badge indicators for pending tasks and active interviews.
-2. **Top Header (`#header`)**:
-   - Live date display & academic semester context.
-   - Global quick-search input.
-   - Interactive notification flyout drawer.
-   - Quick Add menu with 1-click modal shortcuts.
-   - Dark/light mode toggle.
-3. **Main Content Container (`#page-content`)**:
-   - CSS grid responsive dashboard container.
-   - Max width constraint 1600px with dynamic padding.
-
-### Executive Overview Grid Architecture
 ```text
-┌────────────────────────────────────────────────────────────────────────┐
-│ Top Bar: Live Date · Current Semester · Quick Add · Notifications · Search│
-├───────────────┬────────────────────────────────────────────────────────┤
-│ Sidebar Nav   │ Row 1: 10 KPI Metric Cards                             │
-│ • Overview    ├───────────────────────────────┬────────────────────────┤
-│ • Academic    │ Row 2: Today's Schedule       │ Row 2: Needs Attention │
-│ • Professional│        (Hourly Timeline)      │        (Risk Engine)   │
-│ • Applications├───────────────────────────────┴────────────────────────┤
-│ • Projects    │ Row 3: Today's Prioritized Tasks                       │
-│ • Tasks       ├───────────────────────────────┬────────────────────────┤
-│ • Calendar    │ Row 4: Academic GPA Trend     │ Row 4: App Pipeline    │
-│ • Goals       ├───────────────────────────────┼────────────────────────┤
-│ • Skills      │ Row 5: Active Projects        │ Row 5: Goal Rings      │
-│ • Achievements├───────────────────────────────┼────────────────────────┤
-│ • Analytics   │ Row 6: Productivity Hours     │ Row 6: Deadlines       │
-│ • Documents   ├───────────────────────────────┴────────────────────────┤
-│ • Settings    │ Row 7: Weekly Retrospective Review & Top 3 Priorities  │
-└───────────────┴────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ Top Bar: Page Title · Live Date · Current Semester · + Quick Add · Notification Hub (1)│
+├───────────────┬────────────────────────────────────────────────────────────────────────┤
+│ Sidebar Nav   │ Row 1: 10 KPI Telemetry Grid (GPA, Courses, Due, Exams, Projects...)    │
+│ • Overview    ├────────────────────────────────────────┬───────────────────────────────┤
+│ • Academic    │ Row 2: Today's Schedule                │ Row 2: Needs Attention        │
+│ • Professional│        (Horizontal Cyber Timeline)     │        (Risk & Threat Engine) │
+│ • Applications├────────────────────────────────────────┴───────────────────────────────┤
+│ • Projects    │ Row 3: Today's Tasks (HUD Priority & Status Matrix Table)              │
+│ • Tasks       ├─────────────────────────┬──────────────────────────────┬───────────────┤
+│ • Calendar    │ Row 4: Academic Progress│ Application Pipeline         │ Active Project│
+│ • Goals       │        (Neon Dual Line) │ (Interactive Node Flow)      │ Progress Bars │
+│ • Skills      ├─────────────────────────┼──────────────────────────────┼───────────────┤
+│ • Achievements│ Row 5: Goal Radial Rings│ Productivity Focus Bars      │ Upcoming      │
+│ • Analytics   │        (52% Completion) │ (Mon-Sat Study / Deep Work)  │ Deadlines     │
+│ • Resources   ├─────────────────────────┴──────────────────────────────┴───────────────┤
+│ ⇥ Collapse    │ Row 6: Weekly Strategic Review & Top 3 Priority Objectives             │
+└───────────────┴────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Component Architecture
+## Component Specifications
 
-1. **KPI Cards (`.kpi-card`)**:
-   - Hover micro-lift with subtle border highlighting.
-   - Monospace large typography for instantaneous scanning.
-   - Direct click-through routing to target detailed modules.
+### 1. KPI Telemetry Cards (`.kpi-card`)
+- **Icon Container**: Square rounded container (`36x36px`) with emerald border (`1px solid rgba(0, 255, 157, 0.25)`) and dark green background tint.
+- **Value**: Monospace bold white typography (`#e6f9f2`) with count-up animation.
+- **Label**: Uppercase letter-spaced subtext in cyan-teal (`#74968f`).
+- **Interactive States**: Hover lift `-2px` with luminous border brightening and outer green glow.
 
-2. **Data Tables (`.data-table`)**:
-   - Monospace numeric/date cells.
-   - Hover row highlight with action buttons visible on hover.
-   - Status & priority chip badges.
+### 2. Schedule Timeline (`.schedule-timeline-horizontal`)
+- Continuous glowing horizontal line with circular status nodes.
+- Direct timestamp indicators (`09:00 AM`, `11:00 AM`, `01:00 PM`, `03:00 PM`).
+- Node cards with title, course code, and lecture room metadata.
 
-3. **Kanban Boards (`.kanban-board`, `.kanban-column`, `.kanban-card`)**:
-   - Full drag-and-drop support using HTML5 native Drag & Drop API.
-   - Horizontal smooth scroll container with column item count pills.
+### 3. Threat / Attention Panel (`.attention-item`)
+- Left accent borders indicating severity:
+  - `Critical`: Neon Crimson (`#ff385c`)
+  - `High`: Cyber Emerald (`#00ff9d`)
+  - `Medium`: Cyber Gold (`#e2b714`)
+- Direct action prompts (e.g., *Due in 2 days*, *Prepare for technical interview*, *Complete assessment*).
 
-4. **Progress Rings & Gauges (`.progress-ring`, `.progress-bar`)**:
-   - Calculated dynamic SVG circumference dash-offset for goal completion percentages.
-   - Semantic color fills (`success` ≥ 70%, `warning` 40-69%, `error` < 40%).
+### 4. HUD Task Table (`.data-table`)
+- Crisp headers with sorting triggers.
+- Monospace duration and due dates.
+- Category pills (`Academic`, `Professional`, `Project`, `Personal`) with subtle translucent neon backgrounds.
+- High-contrast status badges (`In Progress`, `Todo`, `Overdue`, `Completed`).
 
-5. **Modal System (`ModalSystem`)**:
-   - Auto-generated schema-based forms for tasks, goals, events, applications, projects, courses, assignments, achievements, and documents.
-   - Inline data editing and confirmation prompts for deletion.
+### 5. Multi-Domain Visualizations (`Charts`)
+- **Dual Gradient Line Charts**: Smooth bezier curves with neon emerald `#00ff9d` and cyan `#00e5ff` glowing fills.
+- **Productivity Histogram**: Rounded glowing emerald bars with stacked study/deep work segments.
+- **Application Pipeline Flow**: Step-by-step stage indicators with stage-specific badge counts.
+- **Radial Goal Gauges**: Dynamic SVG circumference math with stroke glows.
+
+---
+
+## Responsive Breakpoints
+- **Ultra-Wide (≥1440px)**: 5-column metric rows, 3-column analysis grid.
+- **Desktop (1024px–1439px)**: 3-column / 2-column auto-wrapping grids.
+- **Tablet & Mobile (<1024px)**: Collapsible slide-out navigation drawer, stacked single-column HUD cards, touch-optimized tap targets.
