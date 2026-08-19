@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // Redirects deep links back to index.html preserving hash
+    sessionStorage.redirect = location.href;
+    var pathSegments = location.pathname.split('/');
+    // Check if hosted under a repository subpath (e.g. /repo-name/page)
+    var repoName = pathSegments.length > 2 ? '/' + pathSegments[1] : '';
+    location.replace(repoName + '/');
+  </script>
+</head>
+<body>
+  <p>Redirecting to dashboard...</p>
+</body>
+</html>
