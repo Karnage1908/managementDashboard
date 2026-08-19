@@ -5,23 +5,24 @@
 const Charts = {
   instances: {},
 
-  // Global Chart.js defaults for Cyber HUD theme
+  // Global Chart.js defaults for active theme
   initDefaults() {
     if (!window.Chart) return;
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
 
-    Chart.defaults.color = '#74968f';
-    Chart.defaults.borderColor = 'rgba(0, 255, 157, 0.08)';
+    Chart.defaults.color = isLight ? '#475569' : '#74968f';
+    Chart.defaults.borderColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(0, 255, 157, 0.08)';
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.font.size = 12;
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
     Chart.defaults.plugins.legend.labels.pointStyleWidth = 8;
     Chart.defaults.plugins.legend.labels.padding = 16;
-    Chart.defaults.plugins.legend.labels.color = '#74968f';
-    Chart.defaults.plugins.tooltip.backgroundColor = '#0e171a';
-    Chart.defaults.plugins.tooltip.titleColor = '#00ff9d';
-    Chart.defaults.plugins.tooltip.bodyColor = '#e6f9f2';
+    Chart.defaults.plugins.legend.labels.color = isLight ? '#475569' : '#74968f';
+    Chart.defaults.plugins.tooltip.backgroundColor = isLight ? '#ffffff' : '#0e171a';
+    Chart.defaults.plugins.tooltip.titleColor = isLight ? '#059669' : '#00ff9d';
+    Chart.defaults.plugins.tooltip.bodyColor = isLight ? '#0f172a' : '#e6f9f2';
     Chart.defaults.plugins.tooltip.titleFont = { weight: '600' };
-    Chart.defaults.plugins.tooltip.borderColor = 'rgba(0, 255, 157, 0.35)';
+    Chart.defaults.plugins.tooltip.borderColor = isLight ? 'rgba(5, 150, 105, 0.3)' : 'rgba(0, 255, 157, 0.35)';
     Chart.defaults.plugins.tooltip.borderWidth = 1;
     Chart.defaults.plugins.tooltip.padding = 10;
     Chart.defaults.plugins.tooltip.cornerRadius = 8;

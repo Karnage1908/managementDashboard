@@ -142,7 +142,7 @@
   font-size: var(--fs-2xl);
   font-weight: var(--fw-extrabold);
   font-family: var(--font-mono);
-  color: #ffffff;
+  color: var(--text-primary);
   line-height: 1;
   margin-bottom: var(--sp-1);
   letter-spacing: -0.02em;
@@ -536,7 +536,7 @@
   position: absolute;
   font-family: var(--font-mono);
   font-weight: var(--fw-bold);
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 /* --- Tabs --- */
@@ -973,12 +973,12 @@
 .schedule-node-top {
   position: absolute;
   top: -38px;
-  background: rgba(0, 255, 157, 0.1);
-  border: 1px solid rgba(0, 255, 157, 0.3);
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
   padding: 4px 10px;
   border-radius: 6px;
   white-space: nowrap;
-  animation: pulseGlow 3s infinite;
+  box-shadow: 0 0 10px var(--accent-dim);
 }
 
 .schedule-node-dot {
@@ -1130,8 +1130,8 @@
   gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-4);
   border-radius: var(--radius-md);
-  background: rgba(0, 255, 157, 0.02);
-  border: 1px solid rgba(0, 255, 157, 0.12);
+  background: var(--bg-card);
+  border: var(--border-subtle);
   border-left: 3px solid var(--accent);
   margin-bottom: var(--sp-2);
   cursor: pointer;

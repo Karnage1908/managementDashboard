@@ -68,14 +68,11 @@ const App = {
     document.documentElement.setAttribute('data-theme', next);
     Store.updateSettings({ theme: next });
 
-    // Update Chart.js defaults for new theme
-    if (window.Chart) {
-      Chart.defaults.color = next === 'dark' ? '#646669' : '#888a8d';
-      Chart.defaults.borderColor = next === 'dark' ? 'rgba(100,102,105,0.15)' : 'rgba(50,52,55,0.1)';
-      Chart.defaults.plugins.tooltip.backgroundColor = next === 'dark' ? '#3a3c3f' : '#f5f3ef';
-      Chart.defaults.plugins.tooltip.titleColor = next === 'dark' ? '#d1d0c5' : '#323437';
-      Chart.defaults.plugins.tooltip.bodyColor = next === 'dark' ? '#d1d0c5' : '#323437';
-    }
+    // Re-initialize Chart.js defaults for active theme
+    Charts.initDefaults();
+
+    // Re-render current route to update charts & svg gauges seamlessly
+    Router.handleRoute();
   },
 
   showToast(message, type = 'info', title = '') {

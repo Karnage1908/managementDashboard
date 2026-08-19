@@ -139,28 +139,58 @@
 
 /* --- Light Theme Override --- */
 [data-theme="light"] {
-  --bg-primary: #f0fdf7;
-  --bg-secondary: #e6f7f0;
+  --bg-primary: #f6faf8;
+  --bg-secondary: #ebf5f0;
   --bg-tertiary: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #eafaf2;
+  --bg-card-hover: #f2f9f5;
   --bg-input: #ffffff;
-  --bg-overlay: rgba(240, 253, 247, 0.92);
+  --bg-overlay: rgba(246, 250, 248, 0.92);
 
+  /* Primary Accent in light mode: deep emerald */
   --accent: #059669;
-  --accent-hover: #10b981;
+  --accent-hover: #047857;
   --accent-dim: rgba(5, 150, 105, 0.12);
   --accent-glow: rgba(5, 150, 105, 0.22);
-  --text-primary: #064e3b;
-  --text-secondary: #047857;
-  --text-muted: #6ee7b7;
+  --accent-subtle: rgba(5, 150, 105, 0.05);
+
+  /* High-contrast Typography for light mode */
+  --text-primary: #0f172a;     /* Deep slate - crisp & readable */
+  --text-secondary: #475569;   /* Slate - 5.5:1 contrast */
+  --text-muted: #64748b;       /* Muted slate - 4.5:1 contrast */
+  --text-accent: #059669;
   --text-on-accent: #ffffff;
 
-  --border-subtle: 1px solid rgba(5, 150, 105, 0.16);
-  --border-medium: 1px solid rgba(5, 150, 105, 0.28);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(5, 150, 105, 0.08);
-  --shadow-lg: 0 8px 32px rgba(5, 150, 105, 0.12);
+  /* Status tokens */
+  --color-success: #059669;
+  --color-success-dim: rgba(5, 150, 105, 0.12);
+  --color-warning: #d97706;
+  --color-warning-dim: rgba(217, 119, 6, 0.12);
+  --color-error: #e11d48;
+  --color-error-dim: rgba(225, 29, 72, 0.12);
+  --color-info: #0284c7;
+  --color-info-dim: rgba(2, 132, 199, 0.12);
+
+  /* Priority Levels */
+  --priority-critical: #e11d48;
+  --priority-high: #059669;
+  --priority-medium: #d97706;
+  --priority-low: #0284c7;
+
+  /* Categories */
+  --cat-academic: #0284c7;
+  --cat-professional: #7c3aed;
+  --cat-personal: #db2777;
+  --cat-project: #059669;
+
+  /* Borders & Shadows */
+  --border-subtle: 1px solid rgba(5, 150, 105, 0.18);
+  --border-medium: 1px solid rgba(5, 150, 105, 0.32);
+  --border-glow: 1px solid rgba(5, 150, 105, 0.5);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 0 1px rgba(5, 150, 105, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 1px rgba(5, 150, 105, 0.2);
+  --shadow-glow: 0 0 15px rgba(5, 150, 105, 0.2);
 }
 
 /* --- CSS Reset --- */
